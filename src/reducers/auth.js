@@ -2,6 +2,7 @@ import {
   AUTH_LOGIN_FETCHING,
   AUTH_LOGIN_FETCHING_FINISH,
   AUTH_LOGIN_FETCHING_ERROR,
+  AUTH_GET_CURRENT_USER,
 } from '../actions/auth';
 
 const defaultState = {
@@ -45,6 +46,12 @@ export default function authReducers(state = defaultState, action) {
         loginIfFetching: false,
         token: null,
         error: action.payload,
+      };
+
+    case AUTH_GET_CURRENT_USER:
+      return {
+        ...state,
+        currentUser: action.payload,
       };
 
     default:

@@ -1,5 +1,5 @@
 import JWT from 'jsonwebtoken';
-import { setItem } from '../utils/storage';
+import { setItem, getItem } from '../utils/storage';
 
 import { login as loginRequest } from '../api/auth';
 
@@ -28,6 +28,17 @@ export function login(params) {
       });
       throw err;
     }
+  };
+}
+
+export const AUTH_GET_CURRENT_USER = 'AUTH_GET_CURRENT_USER';
+export function getCurrentUser() {
+  return async (dispatch) => {
+    const token = getItem('token');
+    dispatch({
+      type: AUTH_GET_CURRENT_USER,
+      payload: JWT.decode(token),
+    });
   };
 }
 
