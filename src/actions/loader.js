@@ -1,4 +1,3 @@
-import { getCurrentUser } from './auth';
 // import { get as getSettings } from './settings';
 
 export const INITIAL_DATA_FETCHING = 'INITIAL_DATA_FETCHING';
@@ -11,7 +10,6 @@ export function getInitialData() {
     });
 
     return Promise.all([
-      dispatch(getCurrentUser()),
       // dispatch(getSettings()),
     ]).then(() => {
       dispatch({

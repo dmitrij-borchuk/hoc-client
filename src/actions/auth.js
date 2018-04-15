@@ -1,34 +1,7 @@
+import JWT from 'jsonwebtoken';
 import { setItem } from '../utils/storage';
 
-import {
-  login as loginRequest,
-  getCurrentUser as getCurrentUserRequest,
-} from '../api/auth';
-
-export const AUTH_CURRENT_USER_FETCHING = 'AUTH_CURRENT_USER_FETCHING';
-export const AUTH_CURRENT_USER_FETCHING_FINISH = 'AUTH_CURRENT_USER_FETCHING_FINISH';
-export const AUTH_CURRENT_USER_FETCHING_ERROR = 'AUTH_CURRENT_USER_FETCHING_ERROR';
-export function getCurrentUser() {
-  return (dispatch) => {
-    dispatch({
-      type: AUTH_CURRENT_USER_FETCHING,
-    });
-
-    return getCurrentUserRequest().then(res => dispatch({
-      type: AUTH_CURRENT_USER_FETCHING_FINISH,
-      payload: res.body,
-    })).catch((err) => {
-      if (err instanceof Error) {
-        throw err;
-      } else {
-        dispatch({
-          type: AUTH_CURRENT_USER_FETCHING_ERROR,
-        });
-        return Promise.reject(err);
-      }
-    });
-  };
-}
+import { login as loginRequest } from '../api/auth';
 
 export const AUTH_LOGIN_FETCHING = 'AUTH_LOGIN_FETCHING';
 export const AUTH_LOGIN_FETCHING_FINISH = 'AUTH_LOGIN_FETCHING_FINISH';
@@ -41,13 +14,12 @@ export function login(params) {
 
     try {
       const response = await loginRequest(params);
-      setItem('token', response.body.id);
-      setItem('userId', response.body.userId);
+      const token = response.text;
+      setItem('token', token);
       dispatch({
         type: AUTH_LOGIN_FETCHING_FINISH,
-        payload: response.text,
+        payload: JWT.decode(token),
       });
-      return dispatch(getCurrentUser());
     } catch (err) {
       dispatch({
         type: AUTH_LOGIN_FETCHING_ERROR,

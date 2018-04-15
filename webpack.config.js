@@ -2,13 +2,13 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: ['babel-polyfill', './client/index.jsx'],
+  entry: ['babel-polyfill', './src/index.jsx'],
   output: {
     path: path.resolve(__dirname, 'docs'),
     filename: 'bundle.js',
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: './client/index.html' }),
+    new HtmlWebpackPlugin({ template: './src/index.html' }),
   ],
   devtool: 'source-map',
   resolve: {
@@ -18,7 +18,7 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:8000',
       },
     },
     historyApiFallback: true,
