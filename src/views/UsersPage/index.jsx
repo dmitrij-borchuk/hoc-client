@@ -57,6 +57,7 @@ class UsersPage extends PureComponent {
     const {
       users,
       listFetching,
+      listFetchingError,
     } = this.props;
     const {
       dialogOpened,
@@ -67,6 +68,7 @@ class UsersPage extends PureComponent {
     const serverError = '';
     const isFetching = false;
 
+    console.log('=-= listFetching', listFetching);
     if (listFetching) {
       return <Loader />;
     }
@@ -110,6 +112,7 @@ class UsersPage extends PureComponent {
 const mapStateToProps = ({ users, pages }) => ({
   users: users.list,
   listFetching: pages.usersPage.fetching,
+  listFetchingError: pages.usersPage.error,
 });
 
 const mapDispatchToProps = dispatch => ({

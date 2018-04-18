@@ -2,7 +2,7 @@ import {
   USERS_PAGE_DATA_FETCHING,
   USERS_PAGE_DATA_FETCHING_FINISH,
   USERS_PAGE_DATA_FETCHING_ERROR,
-} from '../actions/users';
+} from '../actions/pages';
 
 const defaultState = {
   usersPage: {
@@ -17,6 +17,7 @@ export default function authReducers(state = defaultState, action) {
       return {
         ...state,
         usersPage: {
+          ...state.usersPage,
           fetching: true,
         },
       };
@@ -24,6 +25,7 @@ export default function authReducers(state = defaultState, action) {
       return {
         ...state,
         usersPage: {
+          ...state.usersPage,
           fetching: false,
           error: null,
         },
@@ -32,6 +34,7 @@ export default function authReducers(state = defaultState, action) {
       return {
         ...state,
         usersPage: {
+          ...state.usersPage,
           fetching: false,
           error: action.payload,
         },

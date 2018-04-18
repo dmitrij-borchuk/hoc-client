@@ -1,9 +1,10 @@
 import {
   getWithTeaching,
   getById,
-  getAll,
   create,
 } from '../api/users';
+import query from '../api/graphql';
+import usersQuery from '../queries/users';
 
 export const GET_USER_WITH_TEACHING_FETCHING = 'GET_USER_WITH_TEACHING_FETCHING';
 export const GET_USER_WITH_TEACHING_FETCHING_FINISH = 'GET_USER_WITH_TEACHING_FETCHING_FINISH';
@@ -69,10 +70,12 @@ export function getUsers() {
     });
 
     try {
-      const responce = await getAll();
+      const responce = await query({
+        query: usersQuery,
+      });
       dispatch({
         type: GET_USERS_FETCHING_FINISH,
-        payload: responce.body,
+        payload: responce.body.data.users,
       });
     } catch (error) {
       dispatch({
