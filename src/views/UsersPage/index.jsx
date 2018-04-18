@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
+import Snackbar from 'material-ui/Snackbar';
 import { reduxForm, Field, submit } from 'redux-form';
 import { createUser } from '../../actions/users';
 import { usersPageGetData } from '../../actions/pages';
@@ -20,9 +21,13 @@ class UsersPage extends PureComponent {
     getData: PropTypes.func.isRequired,
     users: PropTypes.arrayOf(PropTypes.shape({})),
     listFetching: PropTypes.bool.isRequired,
+    listFetchingError: PropTypes.shape({
+      status: PropTypes.number,
+    }),
   }
   static defaultProps = {
     users: [],
+    listFetchingError: null,
   }
 
   state = {
@@ -68,9 +73,27 @@ class UsersPage extends PureComponent {
     const serverError = '';
     const isFetching = false;
 
-    console.log('=-= listFetching', listFetching);
+    console.log('=-= listFetchingError', listFetchingError);
     if (listFetching) {
       return <Loader />;
+    }
+
+    if (listFetchingError) {
+      // TODO: improve it by changing to the big icon with text in the middle of the screen
+      return (
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          open
+          autoHideDuration={6000}
+          SnackbarContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Can`t load users</span>}
+        />
+      );
     }
 
     return (
