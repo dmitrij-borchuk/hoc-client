@@ -24,7 +24,7 @@ export function login(params) {
       dispatch({
         type: AUTH_LOGIN_FETCHING_ERROR,
         error: true,
-        payload: err.response.body.error,
+        payload: err.response.body,
       });
       throw err;
     }

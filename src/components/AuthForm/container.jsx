@@ -10,6 +10,10 @@ function getErrorText(error) {
   };
   const currentError = errorMessages[error && error.statusCode];
 
+  if (!error) {
+    return null;
+  }
+
   return currentError || 'Something went wrong';
 }
 
