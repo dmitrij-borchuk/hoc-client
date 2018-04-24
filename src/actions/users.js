@@ -73,6 +73,9 @@ export function getUsers() {
       const responce = await query({
         query: usersQuery,
       });
+      if (responce.body.errors) {
+        throw responce.body.errors;
+      }
       dispatch({
         type: GET_USERS_FETCHING_FINISH,
         payload: responce.body.data.users,
