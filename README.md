@@ -15,3 +15,7 @@ yarn run Lint
 yarn install
 yarn run storybook
 ```
+
+### Initialization
+* Go to `/init`
+* Fill fields
