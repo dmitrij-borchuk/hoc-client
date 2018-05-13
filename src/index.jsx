@@ -22,12 +22,6 @@ const theme = createMuiTheme();
 
 // eslint-disable-next-line no-undef
 const root = document.getElementById('root');
-// render(
-//   <Provider store={store}>
-//     <App />
-//   </Provider>,
-//   root,
-// );
 
 render(
   <Provider store={store}>

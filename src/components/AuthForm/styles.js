@@ -24,7 +24,7 @@ export const SubmitBtn = styled.div`
   margin-top: 15px;
 `;
 
-// export const BottomLink = styled.div`
-//   margin-top: 10px;
-//   text-align: right;
-// `;
+export const BottomLink = styled.div`
+  margin-top: 10px;
+  text-align: right;
+`;
