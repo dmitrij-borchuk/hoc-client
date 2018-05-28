@@ -4,6 +4,7 @@ import {
   CREATE_USER_FETCHING,
   CREATE_USER_FETCHING_FINISH,
   CREATE_USER_FETCHING_ERROR,
+  SET_USER_DIALOG_STATE,
 } from '../actions/users';
 
 const defaultState = {
@@ -11,8 +12,9 @@ const defaultState = {
   userWithTeaching: null,
   creating: {
     fetching: false,
-    errors: null,
+    errors: [],
   },
+  dialogOpened: false,
 };
 
 export default function authReducers(state = defaultState, action) {
@@ -52,8 +54,14 @@ export default function authReducers(state = defaultState, action) {
         creating: {
           ...state.creating,
           fetching: false,
-          errors: action.payload.response.body.errors,
+          errors: action.payload,
         },
+      };
+
+    case SET_USER_DIALOG_STATE:
+      return {
+        ...state,
+        dialogOpened: action.payload,
       };
 
     default:

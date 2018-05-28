@@ -5,7 +5,7 @@ import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
 import Snackbar from 'material-ui/Snackbar';
 import { reduxForm, Field, submit } from 'redux-form';
-import { createUser } from '../../actions/users';
+import * as usersActions from '../../actions/users';
 import { usersPageGetData } from '../../actions/pages';
 import List from '../../components/List';
 import Dialog from '../../components/DialogForm';
@@ -20,46 +20,27 @@ class UsersPage extends PureComponent {
   static propTypes = {
     getData: PropTypes.func.isRequired,
     users: PropTypes.arrayOf(PropTypes.shape({})),
-    creationErrors: PropTypes.string,
+    creationErrors: PropTypes.arrayOf(PropTypes.shape({
+      path: PropTypes.string.isRequired,
+      message: PropTypes.string.isRequired,
+    })),
     listFetching: PropTypes.bool.isRequired,
     listFetchingError: PropTypes.shape({
       status: PropTypes.number,
     }),
     onSaveClick: PropTypes.func.isRequired,
     creationFetching: PropTypes.bool.isRequired,
+    dialogOpened: PropTypes.bool.isRequired,
+    setUserDialogState: PropTypes.func.isRequired,
   }
   static defaultProps = {
     users: [],
     listFetchingError: null,
-    creationErrors: null,
+    creationErrors: [],
   }
-
-  state = {
-    dialogOpened: true,
-  };
 
   componentDidMount() {
     this.props.getData();
-  }
-
-  onAddClick() {
-    this.setState({
-      dialogOpened: true,
-    });
-  }
-
-  onDialogClose() {
-    this.setState({
-      dialogOpened: false,
-    });
-  }
-
-  onDialogSave() {
-    const {
-      onSaveClick,
-    } = this.props;
-
-    onSaveClick();
   }
 
   render() {
@@ -69,15 +50,18 @@ class UsersPage extends PureComponent {
       listFetchingError,
       creationErrors,
       creationFetching,
-    } = this.props;
-    const {
       dialogOpened,
-    } = this.state;
+      onSaveClick,
+      setUserDialogState,
+    } = this.props;
     const items = users.map(user => user.username);
-
-    // TODO
-    // const serverError = '';
-    const isFetching = false;
+    const errorMap = creationErrors.reduce(
+      (acc, cur) => ({
+        ...acc,
+        [cur.path]: cur,
+      }),
+      {},
+    );
 
     if (listFetching) {
       return <Loader />;
@@ -109,7 +93,7 @@ class UsersPage extends PureComponent {
             variant="fab"
             color="primary"
             aria-label="add"
-            onClick={() => this.onAddClick()}
+            onClick={() => setUserDialogState(true)}
           >
             <AddIcon />
           </Button>
@@ -117,27 +101,28 @@ class UsersPage extends PureComponent {
 
         <Dialog
           isOpened={dialogOpened}
-          onClose={() => this.onDialogClose()}
-          onSave={() => this.onDialogSave()}
+          onClose={() => setUserDialogState(false)}
+          onSave={() => onSaveClick()}
           title="New user"
         >
           <DialogFormBody>
-            {creationErrors}
             <Field
               name="email"
               component={renderTextField}
-              error={!!creationErrors}
+              error={!!errorMap.email}
+              helperText={errorMap.email && errorMap.email.message}
               label="Email"
               fullWidth
-              disabled={isFetching}
+              disabled={creationFetching}
             />
             <Field
               name="username"
               component={renderTextField}
-              error={!!creationErrors}
+              error={!!errorMap.username}
+              helperText={errorMap.username && errorMap.username.message}
               label="Username"
               fullWidth
-              disabled={isFetching}
+              disabled={creationFetching}
             />
           </DialogFormBody>
           {creationFetching && <Loader />}
@@ -153,12 +138,14 @@ const mapStateToProps = ({ users, pages }) => ({
   listFetchingError: pages.usersPage.error,
   creationErrors: users.creating.errors,
   creationFetching: users.creating.fetching,
+  dialogOpened: users.dialogOpened,
 });
 
 const mapDispatchToProps = dispatch => ({
   getData: () => dispatch(usersPageGetData()),
   onSaveClick: () => dispatch(submit(FORM_NAME)),
-  onSubmit: data => dispatch(createUser(data)),
+  onSubmit: data => dispatch(usersActions.createUser(data)),
+  setUserDialogState: data => dispatch(usersActions.setUserDialogState(data)),
 });
 
 export default connect(

@@ -110,9 +110,19 @@ export function createUser(data) {
       dispatch({
         type: CREATE_USER_FETCHING_ERROR,
         error: true,
-        payload: error,
+        payload: error.response.body.data,
       });
       throw error;
     }
+  };
+}
+
+export const SET_USER_DIALOG_STATE = 'SET_USER_DIALOG_STATE';
+export function setUserDialogState(data) {
+  return async (dispatch) => {
+    dispatch({
+      type: SET_USER_DIALOG_STATE,
+      payload: data,
+    });
   };
 }
