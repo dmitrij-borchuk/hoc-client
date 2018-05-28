@@ -20,6 +20,7 @@ class UsersPage extends PureComponent {
   static propTypes = {
     getData: PropTypes.func.isRequired,
     users: PropTypes.arrayOf(PropTypes.shape({})),
+    creationErrors: PropTypes.string,
     listFetching: PropTypes.bool.isRequired,
     listFetchingError: PropTypes.shape({
       status: PropTypes.number,
@@ -28,10 +29,11 @@ class UsersPage extends PureComponent {
   static defaultProps = {
     users: [],
     listFetchingError: null,
+    creationErrors: null,
   }
 
   state = {
-    dialogOpened: false,
+    dialogOpened: true,
   };
 
   componentDidMount() {
@@ -63,6 +65,7 @@ class UsersPage extends PureComponent {
       users,
       listFetching,
       listFetchingError,
+      creationErrors,
     } = this.props;
     const {
       dialogOpened,
@@ -73,7 +76,6 @@ class UsersPage extends PureComponent {
     const serverError = '';
     const isFetching = false;
 
-    console.log('=-= listFetchingError', listFetchingError);
     if (listFetching) {
       return <Loader />;
     }
@@ -116,13 +118,21 @@ class UsersPage extends PureComponent {
           title="New user"
         >
           <DialogFormBody>
+            {creationErrors}
             <Field
               name="email"
               component={renderTextField}
-              error={!!serverError}
+              error={!!creationErrors}
               label="Email"
               fullWidth
-              helperText={serverError}
+              disabled={isFetching}
+            />
+            <Field
+              name="username"
+              component={renderTextField}
+              error={!!creationErrors}
+              label="Username"
+              fullWidth
               disabled={isFetching}
             />
           </DialogFormBody>
@@ -134,6 +144,7 @@ class UsersPage extends PureComponent {
 
 const mapStateToProps = ({ users, pages }) => ({
   users: users.list,
+  creationErrors: users.creationErrors,
   listFetching: pages.usersPage.fetching,
   listFetchingError: pages.usersPage.error,
 });

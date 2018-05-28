@@ -26,12 +26,8 @@ export class InitPage extends PureComponent {
       history,
     } = this.props;
 
-    try {
-      await handleSubmit(data);
-      history.push('/');
-    } catch (error) {
-      console.log('=-= error', error);
-    }
+    await handleSubmit(data);
+    history.push('/');
   }
 
   render() {
