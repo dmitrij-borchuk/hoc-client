@@ -26,6 +26,7 @@ class UsersPage extends PureComponent {
       status: PropTypes.number,
     }),
     onSaveClick: PropTypes.func.isRequired,
+    creationFetching: PropTypes.bool.isRequired,
   }
   static defaultProps = {
     users: [],
@@ -67,6 +68,7 @@ class UsersPage extends PureComponent {
       listFetching,
       listFetchingError,
       creationErrors,
+      creationFetching,
     } = this.props;
     const {
       dialogOpened,
@@ -112,6 +114,7 @@ class UsersPage extends PureComponent {
             <AddIcon />
           </Button>
         </Fab>
+
         <Dialog
           isOpened={dialogOpened}
           onClose={() => this.onDialogClose()}
@@ -137,6 +140,7 @@ class UsersPage extends PureComponent {
               disabled={isFetching}
             />
           </DialogFormBody>
+          {creationFetching && <Loader />}
         </Dialog>
       </Fragment>
     );
@@ -145,9 +149,10 @@ class UsersPage extends PureComponent {
 
 const mapStateToProps = ({ users, pages }) => ({
   users: users.list,
-  creationErrors: users.creationErrors,
   listFetching: pages.usersPage.fetching,
   listFetchingError: pages.usersPage.error,
+  creationErrors: users.creating.errors,
+  creationFetching: users.creating.fetching,
 });
 
 const mapDispatchToProps = dispatch => ({
