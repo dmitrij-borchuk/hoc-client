@@ -45,7 +45,7 @@ export default function authReducers(state = defaultState, action) {
         creating: {
           ...state.creating,
           fetching: false,
-          errors: null,
+          errors: [],
         },
       };
     case CREATE_USER_FETCHING_ERROR:
