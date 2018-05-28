@@ -1,10 +1,8 @@
 import {
   getWithTeaching,
   getById,
-  create,
+  getAll,
 } from '../api/users';
-import query from '../api/graphql';
-import usersQuery from '../queries/users';
 
 export const GET_USER_WITH_TEACHING_FETCHING = 'GET_USER_WITH_TEACHING_FETCHING';
 export const GET_USER_WITH_TEACHING_FETCHING_FINISH = 'GET_USER_WITH_TEACHING_FETCHING_FINISH';
@@ -70,15 +68,13 @@ export function getUsers() {
     });
 
     try {
-      const responce = await query({
-        query: usersQuery,
-      });
+      const responce = await getAll();
       if (responce.body.errors) {
         throw responce.body.errors;
       }
       dispatch({
         type: GET_USERS_FETCHING_FINISH,
-        payload: responce.body.data.users,
+        payload: responce.body,
       });
     } catch (error) {
       dispatch({
@@ -91,28 +87,37 @@ export function getUsers() {
   };
 }
 
-export const CREATE_USER_FETCHING = 'CREATE_USER_FETCHING';
-export const CREATE_USER_FETCHING_FINISH = 'CREATE_USER_FETCHING_FINISH';
-export const CREATE_USER_FETCHING_ERROR = 'CREATE_USER_FETCHING_ERROR';
-export function createUser(data) {
-  return async (dispatch) => {
-    dispatch({
-      type: CREATE_USER_FETCHING,
-    });
+// export const CREATE_USER_FETCHING = 'CREATE_USER_FETCHING';
+// export const CREATE_USER_FETCHING_FINISH = 'CREATE_USER_FETCHING_FINISH';
+// export const CREATE_USER_FETCHING_ERROR = 'CREATE_USER_FETCHING_ERROR';
+// export function createUser(data) {
+//   return async (dispatch) => {
+//     dispatch({
+//       type: CREATE_USER_FETCHING,
+//     });
 
-    try {
-      const responce = await create(data);
-      dispatch({
-        type: CREATE_USER_FETCHING_FINISH,
-        payload: responce.body,
-      });
-    } catch (error) {
-      dispatch({
-        type: CREATE_USER_FETCHING_ERROR,
-        error: true,
-        payload: error,
-      });
-      throw error;
-    }
-  };
-}
+//     try {
+//       const responce = await query({
+//         query: createUserQuery,
+//         variables: {
+//           input: data,
+//         },
+//       });
+//       if (responce.body.errors) {
+//         throw responce.body.errors;
+//       }
+//       dispatch({
+//         type: CREATE_USER_FETCHING_FINISH,
+//         payload: responce.body,
+//       });
+//     } catch (error) {
+//       console.log('=-= error', error);
+//       dispatch({
+//         type: CREATE_USER_FETCHING_ERROR,
+//         error: true,
+//         payload: error,
+//       });
+//       throw error;
+//     }
+//   };
+// }
