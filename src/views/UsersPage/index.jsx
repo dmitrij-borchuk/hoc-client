@@ -25,6 +25,7 @@ class UsersPage extends PureComponent {
     listFetchingError: PropTypes.shape({
       status: PropTypes.number,
     }),
+    onSaveClick: PropTypes.func.isRequired,
   }
   static defaultProps = {
     users: [],
@@ -73,7 +74,7 @@ class UsersPage extends PureComponent {
     const items = users.map(user => user.username);
 
     // TODO
-    const serverError = '';
+    // const serverError = '';
     const isFetching = false;
 
     if (listFetching) {
