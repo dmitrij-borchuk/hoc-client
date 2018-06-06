@@ -5,8 +5,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import CssBaseline from 'material-ui/CssBaseline';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import './styles.css';
 import reducers from './reducers';
 import App from './App';
@@ -17,7 +16,6 @@ const store = createStore(
   // TODO: remove "composeWithDevTools" on production
   composeWithDevTools(applyMiddleware(thunk)),
 );
-const theme = createMuiTheme();
 
 // eslint-disable-next-line no-undef
 const root = document.getElementById('root');
@@ -26,7 +24,7 @@ render(
   <Provider store={store}>
     <BrowserRouter>
       {/* <LanguageProvider messages={messages}> */}
-      <MuiThemeProvider theme={theme}>
+      <div>
         <CssBaseline />
         <Switch>
           <Route path="/login" component={LoginContainer} />
@@ -34,7 +32,7 @@ render(
           <Route path="/setPassword/:token" component={SetPasswordPage} /> */}
           <Route path="/" component={App} />
         </Switch>
-      </MuiThemeProvider>
+      </div>
       {/* </LanguageProvider> */}
     </BrowserRouter>
   </Provider>,

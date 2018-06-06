@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BottomNavigation from 'material-ui/BottomNavigation';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
 import { Container } from './styles';
 
 export default class BottomNavigationComponent extends React.Component {

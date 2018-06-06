@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import AppBar from 'material-ui/AppBar';
-import Typography from 'material-ui/Typography';
+import AppBar from '@material-ui/core/AppBar';
+import Typography from '@material-ui/core/Typography';
 
 export const Header = styled(AppBar)`
   && {

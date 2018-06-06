@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'material-ui/Button';
-import Dialog from 'material-ui/Dialog';
-import Toolbar from 'material-ui/Toolbar';
-import IconButton from 'material-ui/IconButton';
-import CloseIcon from 'material-ui-icons/Close';
-import Slide from 'material-ui/transitions/Slide';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
+import Slide from '@material-ui/core/Slide';
 import { Header, Title } from './styles';
 
 function Transition(props) {
@@ -26,12 +26,12 @@ export default function DialogComponent(props) {
       fullScreen
       open={isOpened}
       onClose={onClose}
-      transition={Transition}
+      TransitionComponent={Transition}
     >
       <Header>
         <Toolbar>
           <IconButton color="inherit" onClick={onClose} aria-label="Close">
-            <CloseIcon />
+            <Icon>close</Icon>
           </IconButton>
           <Title variant="title" color="inherit">
             {title}

@@ -5,6 +5,7 @@ import {
   CREATE_USER_FETCHING_FINISH,
   CREATE_USER_FETCHING_ERROR,
   SET_USER_DIALOG_STATE,
+  CLEAR_CREATING_ERRORS,
 } from '../actions/users';
 
 const defaultState = {
@@ -55,6 +56,15 @@ export default function authReducers(state = defaultState, action) {
           ...state.creating,
           fetching: false,
           errors: action.payload,
+        },
+      };
+
+    case CLEAR_CREATING_ERRORS:
+      return {
+        ...state,
+        creating: {
+          ...state.creating,
+          errors: [],
         },
       };
 

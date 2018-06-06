@@ -126,3 +126,12 @@ export function setUserDialogState(data) {
     });
   };
 }
+
+export const CLEAR_CREATING_ERRORS = 'CLEAR_CREATING_ERRORS';
+export function clearCreatingErrors() {
+  return async (dispatch) => {
+    dispatch({
+      type: CLEAR_CREATING_ERRORS,
+    });
+  };
+}

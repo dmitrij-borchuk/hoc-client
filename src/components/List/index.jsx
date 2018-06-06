@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MDList, { ListItem, ListItemText } from 'material-ui/List';
+import MDList from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 export default function List(props) {
   const {
@@ -11,9 +13,7 @@ export default function List(props) {
     <MDList>
       {items.map(item => (
         <ListItem key={item.key}>
-          <ListItemText>
-            <span>{item.text}</span>
-          </ListItemText>
+          <ListItemText primary={item.text} />
         </ListItem>
       ))}
     </MDList>
