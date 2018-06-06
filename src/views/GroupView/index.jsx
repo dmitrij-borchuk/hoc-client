@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-// import Divider from 'material-ui/Divider';
-// import List, { ListItem, ListItemText } from 'material-ui/List';
-import Table, { TableBody, TableCell, TableRow } from 'material-ui/Table';
+// import Divider from '@material-ui/core/Divider';
+// import List, { ListItem, ListItemText } from '@material-ui/core/List';
+import Table, { TableBody, TableCell, TableRow } from '@material-ui/core/Table';
 import { getGroupWithMentor } from '../../actions/groups';
 import { getTime } from '../../utils';
 

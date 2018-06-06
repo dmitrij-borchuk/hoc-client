@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { reduxForm, Field } from 'redux-form';
-import Button from 'material-ui/Button';
+import Button from '@material-ui/core/Button';
 import { initApp } from '../../actions/common';
 import { renderTextField } from '../../utils';
 import Panel from '../../components/Panel';

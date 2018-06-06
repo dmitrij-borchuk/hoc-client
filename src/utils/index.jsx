@@ -1,5 +1,5 @@
 import React from 'react';
-import TextField from 'material-ui/TextField';
+import TextField from '@material-ui/core/TextField';
 
 export const renderTextField = ({
   input, // eslint-disable-line react/prop-types

@@ -1,9 +1,9 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Button from 'material-ui/Button';
-import AddIcon from 'material-ui-icons/Add';
-import Snackbar from 'material-ui/Snackbar';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+import Snackbar from '@material-ui/core/Snackbar';
 import { submit } from 'redux-form';
 import * as usersActions from '../../actions/users';
 import { usersPageGetData } from '../../actions/pages';
@@ -31,6 +31,7 @@ class UsersPage extends PureComponent {
     creationFetching: PropTypes.bool.isRequired,
     dialogOpened: PropTypes.bool.isRequired,
     setUserDialogState: PropTypes.func.isRequired,
+    clearCreatingErrors: PropTypes.func.isRequired,
   }
   static defaultProps = {
     users: [],
@@ -50,6 +51,15 @@ class UsersPage extends PureComponent {
 
     await saveUser(data);
     setUserDialogState(false);
+  }
+
+  closeDialog = () => {
+    const {
+      setUserDialogState,
+      clearCreatingErrors,
+    } = this.props;
+    setUserDialogState(false);
+    clearCreatingErrors();
   }
 
   render() {
@@ -102,13 +112,13 @@ class UsersPage extends PureComponent {
             aria-label="add"
             onClick={() => setUserDialogState(true)}
           >
-            <AddIcon />
+            <Icon>add</Icon>
           </Button>
         </Fab>
 
         <Dialog
           isOpened={dialogOpened}
-          onClose={() => setUserDialogState(false)}
+          onClose={this.closeDialog}
           onSave={submitCreateUserForm}
           title="New user"
         >
@@ -140,6 +150,7 @@ const mapDispatchToProps = dispatch => ({
   submitCreateUserForm: () => dispatch(submit(FORM_NAME)),
   saveUser: data => dispatch(usersActions.createUser(data)),
   setUserDialogState: data => dispatch(usersActions.setUserDialogState(data)),
+  clearCreatingErrors: () => dispatch(usersActions.clearCreatingErrors()),
 });
 
 export default connect(

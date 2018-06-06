@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { BottomNavigationAction } from 'material-ui/BottomNavigation';
-import LocationOnIcon from 'material-ui-icons/LocationOn';
-import AllInclusive from 'material-ui-icons/AllInclusive';
-import ImportContacts from 'material-ui-icons/ImportContacts';
+// import { BottomNavigationAction } from '@material-ui/core/BottomNavigation';
+// import LocationOnIcon from 'material-ui-icons/LocationOn';
+// import AllInclusive from 'material-ui-icons/AllInclusive';
+// import ImportContacts from 'material-ui-icons/ImportContacts';
 import BottomNavigation from '../../components/BottomNavigation';
 import { getSchools } from '../../actions/schools';
 
@@ -21,9 +21,9 @@ export class AdminView extends PureComponent {
   render() {
     return (
       <BottomNavigation showLabels >
-        <BottomNavigationAction label="My region" icon={<LocationOnIcon />} />
+        {/* <BottomNavigationAction label="My region" icon={<LocationOnIcon />} />
         <BottomNavigationAction label="All" icon={<AllInclusive />} />
-        <BottomNavigationAction label="Contacts" icon={<ImportContacts />} />
+        <BottomNavigationAction label="Contacts" icon={<ImportContacts />} /> */}
       </BottomNavigation>
     );
   }
