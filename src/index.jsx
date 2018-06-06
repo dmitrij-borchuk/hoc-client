@@ -11,7 +11,6 @@ import './styles.css';
 import reducers from './reducers';
 import App from './App';
 import LoginContainer from './views/LoginPage';
-import InitPage from './views/InitPage';
 
 const store = createStore(
   reducers,
@@ -31,7 +30,6 @@ render(
         <CssBaseline />
         <Switch>
           <Route path="/login" component={LoginContainer} />
-          <Route path="/init" component={InitPage} />
           {/* <Route path="/resetPassword" component={ResetPasswordPage} />
           <Route path="/setPassword/:token" component={SetPasswordPage} /> */}
           <Route path="/" component={App} />

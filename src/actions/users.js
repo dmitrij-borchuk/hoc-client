@@ -1,10 +1,9 @@
 import {
   getWithTeaching,
   getById,
+  getAll,
   create,
 } from '../api/users';
-import query from '../api/graphql';
-import usersQuery from '../queries/users';
 
 export const GET_USER_WITH_TEACHING_FETCHING = 'GET_USER_WITH_TEACHING_FETCHING';
 export const GET_USER_WITH_TEACHING_FETCHING_FINISH = 'GET_USER_WITH_TEACHING_FETCHING_FINISH';
@@ -70,15 +69,13 @@ export function getUsers() {
     });
 
     try {
-      const responce = await query({
-        query: usersQuery,
-      });
+      const responce = await getAll();
       if (responce.body.errors) {
         throw responce.body.errors;
       }
       dispatch({
         type: GET_USERS_FETCHING_FINISH,
-        payload: responce.body.data.users,
+        payload: responce.body,
       });
     } catch (error) {
       dispatch({
@@ -102,6 +99,9 @@ export function createUser(data) {
 
     try {
       const responce = await create(data);
+      if (responce.body.errors) {
+        throw responce.body.errors;
+      }
       dispatch({
         type: CREATE_USER_FETCHING_FINISH,
         payload: responce.body,
@@ -110,9 +110,19 @@ export function createUser(data) {
       dispatch({
         type: CREATE_USER_FETCHING_ERROR,
         error: true,
-        payload: error,
+        payload: error.response.body.data,
       });
       throw error;
     }
+  };
+}
+
+export const SET_USER_DIALOG_STATE = 'SET_USER_DIALOG_STATE';
+export function setUserDialogState(data) {
+  return async (dispatch) => {
+    dispatch({
+      type: SET_USER_DIALOG_STATE,
+      payload: data,
+    });
   };
 }

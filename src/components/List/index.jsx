@@ -10,9 +10,9 @@ export default function List(props) {
   return (
     <MDList>
       {items.map(item => (
-        <ListItem key={item}>
+        <ListItem key={item.key}>
           <ListItemText>
-            <span>{item}</span>
+            <span>{item.text}</span>
           </ListItemText>
         </ListItem>
       ))}
@@ -21,5 +21,8 @@ export default function List(props) {
 }
 
 List.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.string).isRequired,
+  items: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+  })).isRequired,
 };

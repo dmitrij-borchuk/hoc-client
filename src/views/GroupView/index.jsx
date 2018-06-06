@@ -36,20 +36,20 @@ const getFieldValue = (data, key) => {
 
 class GroupView extends PureComponent {
   static propTypes = {
-    getData: PropTypes.func.isRequired,
+    // getData: PropTypes.func.isRequired,
     group: PropTypes.shape({}),
   }
   static defaultProps = {
     group: null,
   }
 
-  componentDidMount() {
-    const {
-      match,
-    } = this.props;
+  // componentDidMount() {
+  //   const {
+  //     match,
+  //   } = this.props;
 
-    this.props.getData(match.params.id);
-  }
+  //   this.props.getData(match.params.id);
+  // }
 
   // componentDidUpdate() {
   //   const {
@@ -65,9 +65,9 @@ class GroupView extends PureComponent {
   render() {
     const {
       group,
-      match,
+      // match,
     } = this.props;
-    const id = match.params.id;
+    // const id = match.params.id;
 
     if (!group) {
       return null;

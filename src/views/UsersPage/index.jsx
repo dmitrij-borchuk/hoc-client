@@ -4,58 +4,52 @@ import PropTypes from 'prop-types';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
 import Snackbar from 'material-ui/Snackbar';
-import { reduxForm, Field, submit } from 'redux-form';
-import { createUser } from '../../actions/users';
+import { submit } from 'redux-form';
+import * as usersActions from '../../actions/users';
 import { usersPageGetData } from '../../actions/pages';
 import List from '../../components/List';
 import Dialog from '../../components/DialogForm';
 import { Fab } from '../../commonStyles';
-import { renderTextField } from '../../utils';
 import { DialogFormBody } from '../../components/DialogForm/styles';
 import Loader from '../../components/Loader';
-
-const FORM_NAME = 'usersPage';
+import CreateUserForm, { FORM_NAME } from '../../components/CreateUserForm';
 
 class UsersPage extends PureComponent {
   static propTypes = {
     getData: PropTypes.func.isRequired,
     users: PropTypes.arrayOf(PropTypes.shape({})),
+    creationErrors: PropTypes.arrayOf(PropTypes.shape({
+      path: PropTypes.string.isRequired,
+      message: PropTypes.string.isRequired,
+    })),
     listFetching: PropTypes.bool.isRequired,
     listFetchingError: PropTypes.shape({
       status: PropTypes.number,
     }),
+    saveUser: PropTypes.func.isRequired,
+    submitCreateUserForm: PropTypes.func.isRequired,
+    creationFetching: PropTypes.bool.isRequired,
+    dialogOpened: PropTypes.bool.isRequired,
+    setUserDialogState: PropTypes.func.isRequired,
   }
   static defaultProps = {
     users: [],
     listFetchingError: null,
+    creationErrors: [],
   }
-
-  state = {
-    dialogOpened: false,
-  };
 
   componentDidMount() {
     this.props.getData();
   }
 
-  onAddClick() {
-    this.setState({
-      dialogOpened: true,
-    });
-  }
-
-  onDialogClose() {
-    this.setState({
-      dialogOpened: false,
-    });
-  }
-
-  onDialogSave() {
+  saveUser = async (data) => {
     const {
-      onSaveClick,
+      saveUser,
+      setUserDialogState,
     } = this.props;
 
-    onSaveClick();
+    await saveUser(data);
+    setUserDialogState(false);
   }
 
   render() {
@@ -63,17 +57,17 @@ class UsersPage extends PureComponent {
       users,
       listFetching,
       listFetchingError,
-    } = this.props;
-    const {
+      creationErrors,
+      creationFetching,
       dialogOpened,
-    } = this.state;
-    const items = users.map(user => user.username);
+      setUserDialogState,
+      submitCreateUserForm,
+    } = this.props;
+    const items = users.map(user => ({
+      text: user.username,
+      key: user.id.toString(),
+    }));
 
-    // TODO
-    const serverError = '';
-    const isFetching = false;
-
-    console.log('=-= listFetchingError', listFetchingError);
     if (listFetching) {
       return <Loader />;
     }
@@ -98,34 +92,34 @@ class UsersPage extends PureComponent {
 
     return (
       <Fragment>
-        <List items={items} />
+        <List
+          items={items}
+        />
         <Fab>
           <Button
             variant="fab"
             color="primary"
             aria-label="add"
-            onClick={() => this.onAddClick()}
+            onClick={() => setUserDialogState(true)}
           >
             <AddIcon />
           </Button>
         </Fab>
+
         <Dialog
           isOpened={dialogOpened}
-          onClose={() => this.onDialogClose()}
-          onSave={() => this.onDialogSave()}
+          onClose={() => setUserDialogState(false)}
+          onSave={submitCreateUserForm}
           title="New user"
         >
           <DialogFormBody>
-            <Field
-              name="email"
-              component={renderTextField}
-              error={!!serverError}
-              label="Email"
-              fullWidth
-              helperText={serverError}
-              disabled={isFetching}
+            <CreateUserForm
+              disabled={creationFetching}
+              onSubmit={this.saveUser}
+              errors={creationErrors}
             />
           </DialogFormBody>
+          {creationFetching && <Loader />}
         </Dialog>
       </Fragment>
     );
@@ -136,17 +130,19 @@ const mapStateToProps = ({ users, pages }) => ({
   users: users.list,
   listFetching: pages.usersPage.fetching,
   listFetchingError: pages.usersPage.error,
+  creationErrors: users.creating.errors,
+  creationFetching: users.creating.fetching,
+  dialogOpened: users.dialogOpened,
 });
 
 const mapDispatchToProps = dispatch => ({
   getData: () => dispatch(usersPageGetData()),
-  onSaveClick: () => dispatch(submit(FORM_NAME)),
-  onSubmit: data => dispatch(createUser(data)),
+  submitCreateUserForm: () => dispatch(submit(FORM_NAME)),
+  saveUser: data => dispatch(usersActions.createUser(data)),
+  setUserDialogState: data => dispatch(usersActions.setUserDialogState(data)),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(reduxForm({
-  form: FORM_NAME,
-})(UsersPage));
+)(UsersPage);
