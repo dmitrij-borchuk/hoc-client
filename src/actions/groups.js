@@ -1,4 +1,7 @@
-import { getWithMentor } from '../api/groups';
+import {
+  getWithMentor,
+  get,
+} from '../api/groups';
 
 export const GET_GROUP_WITH_MENTOR_FETCHING = 'GET_GROUP_WITH_MENTOR_FETCHING';
 export const GET_GROUP_WITH_MENTOR_FETCHING_FINISH = 'GET_GROUP_WITH_MENTOR_FETCHING_FINISH';
@@ -22,5 +25,33 @@ export function getGroupWithMentor(id) {
         return Promise.reject(err);
       }
     });
+  };
+}
+
+export const GET_GROUPS_FETCHING = 'GET_GROUPS_FETCHING';
+export const GET_GROUPS_FETCHING_FINISH = 'GET_GROUPS_FETCHING_FINISH';
+export const GET_GROUPS_FETCHING_ERROR = 'GET_GROUPS_FETCHING_ERROR';
+export function getGroups() {
+  return async (dispatch) => {
+    dispatch({
+      type: GET_GROUPS_FETCHING,
+    });
+
+    try {
+      const res = await get();
+      return dispatch({
+        type: GET_GROUPS_FETCHING_FINISH,
+        payload: res.body,
+      });
+    } catch (err) {
+      if (err instanceof Error) {
+        throw err;
+      } else {
+        dispatch({
+          type: GET_GROUPS_FETCHING_ERROR,
+        });
+        throw err;
+      }
+    }
   };
 }

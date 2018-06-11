@@ -1,8 +1,12 @@
-import { GET_GROUP_WITH_MENTOR_FETCHING_FINISH } from '../actions/groups';
+import {
+  GET_GROUP_WITH_MENTOR_FETCHING_FINISH,
+  GET_GROUPS_FETCHING_FINISH,
+} from '../actions/groups';
 
 const defaultState = {
   map: [],
   groupWithMentor: null,
+  list: [],
 };
 
 export default function authReducers(state = defaultState, action) {
@@ -11,6 +15,12 @@ export default function authReducers(state = defaultState, action) {
       return {
         ...state,
         groupWithMentor: action.payload,
+      };
+
+    case GET_GROUPS_FETCHING_FINISH:
+      return {
+        ...state,
+        list: action.payload,
       };
 
     default:
