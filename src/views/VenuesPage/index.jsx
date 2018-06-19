@@ -12,6 +12,9 @@ class VenuesPage extends PureComponent {
       name: PropTypes.string.isRequired,
     })),
     listFetching: PropTypes.bool.isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func.isRequired,
+    }).isRequired,
   }
   static defaultProps = {
     groups: [],
@@ -19,6 +22,13 @@ class VenuesPage extends PureComponent {
 
   componentDidMount() {
     this.props.getData();
+  }
+
+  itemClick = (item) => {
+    const {
+      history,
+    } = this.props;
+    history.push(`/group/${item.id}`);
   }
 
   render() {
@@ -30,13 +40,16 @@ class VenuesPage extends PureComponent {
       (a, b) => a.venue.name > b.venue.name,
     ).map(group => ({
       name: `${group.venue.name}/${group.name}`,
+      assignee: group.assigneeFull && group.assigneeFull.username,
       id: group.id,
     }));
     const headers = {
       name: 'School/Group',
+      assignee: 'Assignee',
     };
     const keys = [
       'name',
+      'assignee',
     ];
 
     if (listFetching) {
@@ -49,6 +62,7 @@ class VenuesPage extends PureComponent {
           keys={keys}
           headers={headers}
           data={data}
+          onClick={this.itemClick}
         />
       </Fragment>
     );
