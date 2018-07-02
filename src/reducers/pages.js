@@ -2,9 +2,10 @@ import {
   USERS_PAGE_DATA_FETCHING,
   USERS_PAGE_DATA_FETCHING_FINISH,
   USERS_PAGE_DATA_FETCHING_ERROR,
-  GROUPS_PAGE_DATA_FETCHING,
-  GROUPS_PAGE_DATA_FETCHING_FINISH,
-  GROUPS_PAGE_DATA_FETCHING_ERROR,
+  VENUES_DATA_FETCHING,
+  VENUES_DATA_FETCHING_FINISH,
+  VENUES_DATA_FETCHING_ERROR,
+  VENUE_SET_DIALOG_STATE,
 } from '../actions/pages';
 
 const defaultState = {
@@ -15,6 +16,11 @@ const defaultState = {
   groupsPage: {
     fetching: false,
     error: null,
+  },
+  venuesPage: {
+    fetching: false,
+    error: null,
+    dialogOpened: false,
   },
 };
 
@@ -49,7 +55,7 @@ export default function authReducers(state = defaultState, action) {
       };
 
     // Groups
-    case GROUPS_PAGE_DATA_FETCHING:
+    case VENUES_DATA_FETCHING:
       return {
         ...state,
         groupsPage: {
@@ -57,7 +63,7 @@ export default function authReducers(state = defaultState, action) {
           fetching: true,
         },
       };
-    case GROUPS_PAGE_DATA_FETCHING_FINISH:
+    case VENUES_DATA_FETCHING_FINISH:
       return {
         ...state,
         groupsPage: {
@@ -66,13 +72,22 @@ export default function authReducers(state = defaultState, action) {
           error: null,
         },
       };
-    case GROUPS_PAGE_DATA_FETCHING_ERROR:
+    case VENUES_DATA_FETCHING_ERROR:
       return {
         ...state,
         groupsPage: {
           ...state.groupsPage,
           fetching: false,
           error: action.payload,
+        },
+      };
+
+    case VENUE_SET_DIALOG_STATE:
+      return {
+        ...state,
+        venuesPage: {
+          ...state.venuesPage,
+          dialogOpened: action.payload,
         },
       };
 

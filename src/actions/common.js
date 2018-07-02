@@ -10,13 +10,13 @@ export function initApp(data) {
     });
 
     try {
-      const responce = await init(data);
-      if (responce.body.errors) {
-        throw responce.body.errors;
+      const response = await init(data);
+      if (response.body.errors) {
+        throw response.body.errors;
       }
       dispatch({
         type: INIT_FETCHING_FINISH,
-        payload: responce.body.data,
+        payload: response.body.data,
       });
     } catch (error) {
       dispatch({
