@@ -12,6 +12,7 @@ export default function ResponsiveTable(props) {
     data,
     headers,
     keys,
+    onClick,
   } = props;
 
   return (
@@ -26,9 +27,16 @@ export default function ResponsiveTable(props) {
         </TableHead>
         <TableBody>
           {data.map(row => (
-            <TableRow key={row.id}>
+            <TableRow
+              key={row.id}
+              onClick={() => onClick(row)}
+            >
               {keys.map(key => (
-                <TableCell key={key} component="th" scope="row">
+                <TableCell
+                  key={key}
+                  component="th"
+                  scope="row"
+                >
                   {row[key]}
                 </TableCell>
               ))}
@@ -54,4 +62,9 @@ ResponsiveTable.propTypes = {
     PropTypes.number,
   ])).isRequired,
   keys: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onClick: PropTypes.func,
+};
+
+ResponsiveTable.defaultProps = {
+  onClick: () => {},
 };

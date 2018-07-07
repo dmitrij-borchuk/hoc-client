@@ -69,13 +69,13 @@ export function getUsers() {
     });
 
     try {
-      const responce = await getAll();
-      if (responce.body.errors) {
-        throw responce.body.errors;
+      const response = await getAll();
+      if (response.body.errors) {
+        throw response.body.errors;
       }
       dispatch({
         type: GET_USERS_FETCHING_FINISH,
-        payload: responce.body,
+        payload: response.body,
       });
     } catch (error) {
       dispatch({
@@ -98,13 +98,13 @@ export function createUser(data) {
     });
 
     try {
-      const responce = await create(data);
-      if (responce.body.errors) {
-        throw responce.body.errors;
+      const response = await create(data);
+      if (response.body.errors) {
+        throw response.body.errors;
       }
       dispatch({
         type: CREATE_USER_FETCHING_FINISH,
-        payload: responce.body,
+        payload: response.body,
       });
     } catch (error) {
       dispatch({

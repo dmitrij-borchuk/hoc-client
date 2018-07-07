@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 import { Page } from '../../commonStyles';
 
 function Dashboard(props) {
@@ -11,14 +13,28 @@ function Dashboard(props) {
 
   return (
     <Page>
-      <Button
-        variant="raised"
-        color="primary"
-        onClick={() => history.push('/users')}
-        fullWidth
-      >
-        Users
-      </Button>
+      <List>
+        <ListItem>
+          <Button
+            variant="raised"
+            color="primary"
+            onClick={() => history.push('/users')}
+            fullWidth
+          >
+            Users
+          </Button>
+        </ListItem>
+        <ListItem>
+          <Button
+            variant="raised"
+            color="primary"
+            onClick={() => history.push('/venues')}
+            fullWidth
+          >
+            Schools
+          </Button>
+        </ListItem>
+      </List>
     </Page>
   );
 }
