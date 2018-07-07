@@ -1,27 +1,29 @@
-import { getGroups } from './groups';
 import * as venuesApi from '../api/venues';
 
-export const VENUES_DATA_FETCHING = 'VENUES_DATA_FETCHING';
-export const VENUES_DATA_FETCHING_FINISH = 'VENUES_DATA_FETCHING_FINISH';
-export const VENUES_DATA_FETCHING_ERROR = 'VENUES_DATA_FETCHING_ERROR';
-export function getData() {
+export const VENUES_GET_FETCHING = 'VENUES_GET_FETCHING';
+export const VENUES_GET_FETCHING_FINISH = 'VENUES_GET_FETCHING_FINISH';
+export const VENUES_GET_FETCHING_ERROR = 'VENUES_GET_FETCHING_ERROR';
+export function getVenues() {
   return async (dispatch) => {
     dispatch({
-      type: VENUES_DATA_FETCHING,
+      type: VENUES_GET_FETCHING,
     });
 
     try {
-      await dispatch(getGroups());
-      dispatch({
-        type: VENUES_DATA_FETCHING_FINISH,
+      const res = await venuesApi.get();
+      return dispatch({
+        type: VENUES_GET_FETCHING_FINISH,
+        payload: res.body,
       });
-    } catch (error) {
-      dispatch({
-        type: VENUES_DATA_FETCHING_ERROR,
-        error: true,
-        payload: error,
-      });
-      throw error;
+    } catch (err) {
+      if (err instanceof Error) {
+        throw err;
+      } else {
+        dispatch({
+          type: VENUES_GET_FETCHING_ERROR,
+        });
+        throw err;
+      }
     }
   };
 }

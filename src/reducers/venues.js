@@ -3,13 +3,15 @@ import {
   VENUE_CREATE_FETCHING,
   VENUE_CREATE_FETCHING_FINISH,
   VENUE_CREATE_FETCHING_ERROR,
+  VENUES_GET_FETCHING,
+  VENUES_GET_FETCHING_FINISH,
+  VENUES_GET_FETCHING_ERROR,
 } from '../actions/venues';
 
 const defaultState = {
-  data: {
-    fetching: false,
-    error: null,
-  },
+  list: [],
+  listFetching: false,
+  listFetchingError: null,
   dialogOpened: false,
   creationFetching: false,
   edit: {
@@ -52,6 +54,27 @@ export default function authReducers(state = defaultState, action) {
           fetching: false,
           errors: action.payload,
         },
+      };
+
+    // get
+    case VENUES_GET_FETCHING:
+      return {
+        ...state,
+        listFetching: true,
+        listFetchingError: null,
+      };
+    case VENUES_GET_FETCHING_FINISH:
+      return {
+        ...state,
+        list: action.payload,
+        listFetching: false,
+        listFetchingError: null,
+      };
+    case VENUES_GET_FETCHING_ERROR:
+      return {
+        ...state,
+        listFetching: false,
+        listFetchingError: action.payload,
       };
 
     default:

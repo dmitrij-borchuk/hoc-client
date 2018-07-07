@@ -6,7 +6,7 @@ import Icon from '@material-ui/core/Icon';
 import { submit } from 'redux-form';
 import ResponsiveTable from '../../components/ResponsiveTable';
 import Loader from '../../components/Loader';
-import { Fab } from '../../commonStyles';
+import { Fab, FabGroup } from '../../commonStyles';
 import Dialog from '../../components/DialogForm';
 import { DialogFormBody } from '../../components/DialogForm/styles';
 import CreateVenueForm, { FORM_NAME } from '../../components/CreateVenueForm';
@@ -15,8 +15,9 @@ import * as venuesActions from '../../actions/venues';
 class VenuesPage extends PureComponent {
   static propTypes = {
     getData: PropTypes.func.isRequired,
-    groups: PropTypes.arrayOf(PropTypes.shape({
+    list: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
+      address: PropTypes.string.isRequired,
     })),
     listFetching: PropTypes.bool.isRequired,
     history: PropTypes.shape({
@@ -33,7 +34,7 @@ class VenuesPage extends PureComponent {
     })),
   }
   static defaultProps = {
-    groups: [],
+    list: [],
     creationErrors: [],
   }
 
@@ -61,15 +62,17 @@ class VenuesPage extends PureComponent {
     const {
       create,
       setDialogState,
+      getData,
     } = this.props;
 
     await create(data);
     setDialogState(false);
+    getData();
   }
 
   render() {
     const {
-      groups,
+      list,
       listFetching,
       dialogOpened,
       submitCreateForm,
@@ -77,21 +80,13 @@ class VenuesPage extends PureComponent {
       creationFetching,
       creationErrors,
     } = this.props;
-    console.log('=-= creationErrors', creationErrors);
-    const data = groups.sort(
-      (a, b) => a.venue.name > b.venue.name,
-    ).map(group => ({
-      name: `${group.venue.name}/${group.name}`,
-      assignee: group.assigneeFull && group.assigneeFull.username,
-      id: group.id,
-    }));
     const headers = {
-      name: 'School/Group',
-      assignee: 'Assignee',
+      name: 'School',
+      address: 'Address',
     };
     const keys = [
       'name',
-      'assignee',
+      'address',
     ];
 
     if (listFetching) {
@@ -103,26 +98,28 @@ class VenuesPage extends PureComponent {
         <ResponsiveTable
           keys={keys}
           headers={headers}
-          data={data}
+          data={list}
           onClick={this.itemClick}
         />
 
-        <Fab>
-          <Button
-            variant="fab"
-            color="primary"
-            aria-label="add"
-            onClick={() => setDialogState(true)}
-          >
-            <Icon>add</Icon>
-          </Button>
-        </Fab>
+        <FabGroup>
+          <Fab>
+            <Button
+              variant="fab"
+              color="primary"
+              aria-label="add"
+              onClick={() => setDialogState(true)}
+            >
+              <Icon>add</Icon>
+            </Button>
+          </Fab>
+        </FabGroup>
 
         <Dialog
           isOpened={dialogOpened}
           onClose={this.closeDialog}
           onSave={submitCreateForm}
-          title="New user"
+          title="New venue"
         >
           <DialogFormBody>
             <CreateVenueForm
@@ -138,17 +135,17 @@ class VenuesPage extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ groups, venues }) => ({
-  groups: groups.list,
-  listFetching: venues.data.fetching,
-  listFetchingError: venues.data.error,
+const mapStateToProps = ({ venues }) => ({
+  list: venues.list,
+  listFetching: venues.listFetching,
+  listFetchingError: venues.listFetchingError,
   dialogOpened: venues.dialogOpened,
   creationFetching: venues.edit.fetching,
   creationErrors: venues.edit.errors,
 });
 
 const mapDispatchToProps = {
-  getData: venuesActions.getData,
+  getData: venuesActions.getVenues,
   setDialogState: venuesActions.setDialogState,
   clearCreatingErrors: venuesActions.clearCreatingErrors,
   create: venuesActions.create,
