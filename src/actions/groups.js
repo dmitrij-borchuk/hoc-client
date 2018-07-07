@@ -5,6 +5,9 @@ export const GET_GROUP_WITH_MENTOR_FETCHING_FINISH = 'GET_GROUP_WITH_MENTOR_FETC
 export const GET_GROUP_WITH_MENTOR_FETCHING_ERROR = 'GET_GROUP_WITH_MENTOR_FETCHING_ERROR';
 export function getGroup(id) {
   return (dispatch) => {
+    if (!id) {
+      throw new Error('"id" is not provided');
+    }
     dispatch({
       type: GET_GROUP_WITH_MENTOR_FETCHING,
     });
@@ -78,5 +81,24 @@ export function editGroup(data) {
         throw err;
       }
     }
+  };
+}
+
+export const GROUPS_SET_DIALOG_STATE = 'GROUPS_SET_DIALOG_STATE';
+export function setDialogState(data) {
+  return async (dispatch) => {
+    dispatch({
+      type: GROUPS_SET_DIALOG_STATE,
+      payload: data,
+    });
+  };
+}
+
+export const GROUPS_CLEAR_EDITING_ERRORS = 'GROUPS_CLEAR_EDITING_ERRORS';
+export function clearCreatingErrors() {
+  return async (dispatch) => {
+    dispatch({
+      type: GROUPS_CLEAR_EDITING_ERRORS,
+    });
   };
 }

@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import { getInitialData as getInitialDataAction } from './actions/loader';
 import Dashboard from './views/Dashboard';
 import GroupView from './views/GroupView';
+import GroupsListView from './views/GroupsListView';
 import UsersPage from './views/UsersPage';
 import VenuesPage from './views/VenuesPage';
 import Loader from './components/Loader';
@@ -73,6 +74,7 @@ class App extends PureComponent {
         <Switch>
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/group/:id" component={GroupView} />
+          <Route path="/groups" component={GroupsListView} />
           <Route path="/users" component={UsersPage} />
           <Route path="/venues" component={VenuesPage} />
 

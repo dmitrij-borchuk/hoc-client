@@ -34,6 +34,16 @@ function Dashboard(props) {
             Schools
           </Button>
         </ListItem>
+        <ListItem>
+          <Button
+            variant="raised"
+            color="primary"
+            onClick={() => history.push('/groups')}
+            fullWidth
+          >
+            Groups
+          </Button>
+        </ListItem>
       </List>
     </Page>
   );

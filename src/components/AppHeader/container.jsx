@@ -7,6 +7,14 @@ import { setItem } from '../../utils/storage';
 import AppHeader from './index';
 
 class AppHeaderContainer extends PureComponent {
+  onLogoClick = () => {
+    const {
+      history,
+    } = this.props;
+
+    history.push('/');
+  }
+
   logoutClick() {
     const {
       history,
@@ -21,6 +29,7 @@ class AppHeaderContainer extends PureComponent {
       <AppHeader
         {...this.props}
         logoutClick={() => this.logoutClick()}
+        onLogoClick={this.onLogoClick}
       />
     );
   }

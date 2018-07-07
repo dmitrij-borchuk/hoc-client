@@ -7,12 +7,15 @@ import Button from '@material-ui/core/Button';
 import { Title } from './styles';
 
 function AppHeader(props) {
-  const { logoutClick } = props;
+  const {
+    logoutClick,
+    onLogoClick,
+  } = props;
 
   return (
     <AppBar position="static" color="default">
       <Toolbar>
-        <Title>
+        <Title onClick={onLogoClick}>
           <Typography variant="title" color="inherit">
             Hour of code
           </Typography>
@@ -30,9 +33,11 @@ function AppHeader(props) {
 
 AppHeader.propTypes = {
   logoutClick: PropTypes.func.isRequired,
+  onLogoClick: PropTypes.func,
 };
 
 AppHeader.defaultProps = {
+  onLogoClick: () => {},
 };
 
 export default AppHeader;
