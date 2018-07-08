@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
+import MenuItem from '@material-ui/core/MenuItem';
 import { renderTextField } from '../../utils';
 
 export const FORM_NAME = 'groupForm';
@@ -9,6 +10,7 @@ const CreateGroupForm = (props) => {
   const {
     errors,
     disabled,
+    venues,
   } = props;
   const errorMap = errors.reduce(
     (acc, cur) => ({
@@ -30,14 +32,24 @@ const CreateGroupForm = (props) => {
         disabled={disabled}
       />
       <Field
-        name="address"
+        name="venueId"
         component={renderTextField}
-        error={!!errorMap.address}
-        helperText={errorMap.address && errorMap.address.message}
-        label="Address"
+        error={!!errorMap.venueId}
+        helperText={errorMap.venueId && errorMap.venueId.message}
+        label="Select school"
         fullWidth
         disabled={disabled}
-      />
+
+        id="select-currency"
+        select
+        margin="normal"
+      >
+        {venues.map(option => (
+          <MenuItem key={option.id} value={option.id}>
+            {option.name}
+          </MenuItem>
+        ))}
+      </Field>
     </Fragment>
   );
 };
@@ -46,6 +58,10 @@ CreateGroupForm.propTypes = {
     path: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
   })),
+  venues: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+  })).isRequired,
   disabled: PropTypes.bool.isRequired,
 };
 CreateGroupForm.defaultProps = {

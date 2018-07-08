@@ -102,3 +102,32 @@ export function clearCreatingErrors() {
     });
   };
 }
+
+export const GROUPS_EDIT_FETCHING = 'GROUPS_EDIT_FETCHING';
+export const GROUPS_EDIT_FETCHING_FINISH = 'GROUPS_EDIT_FETCHING_FINISH';
+export const GROUPS_EDIT_FETCHING_ERROR = 'GROUPS_EDIT_FETCHING_ERROR';
+export function create(data) {
+  return async (dispatch) => {
+    dispatch({
+      type: GROUPS_EDIT_FETCHING,
+    });
+
+    try {
+      const response = await groupsApi.create(data);
+      if (response.body.errors) {
+        throw response.body.errors;
+      }
+      dispatch({
+        type: GROUPS_EDIT_FETCHING_FINISH,
+        payload: response.body,
+      });
+    } catch (error) {
+      dispatch({
+        type: GROUPS_EDIT_FETCHING_ERROR,
+        error: true,
+        payload: error.response.body.data,
+      });
+      throw error;
+    }
+  };
+}

@@ -11,14 +11,20 @@ import Dialog from '../../components/DialogForm';
 import { DialogFormBody } from '../../components/DialogForm/styles';
 import CreateGroupForm, { FORM_NAME } from '../../components/CreateGroupForm';
 import * as groupsActions from '../../actions/groups';
+import * as venuesActions from '../../actions/venues';
 
 const getAssignee = data => (data.assigneeFull ? data.assigneeFull.name : 'No assignee');
 class GroupsListView extends PureComponent {
   static propTypes = {
-    getData: PropTypes.func.isRequired,
+    getGroups: PropTypes.func.isRequired,
+    getVenues: PropTypes.func.isRequired,
     list: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
     })),
+    venuesList: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+    })).isRequired,
     listFetching: PropTypes.bool.isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
@@ -38,8 +44,14 @@ class GroupsListView extends PureComponent {
     creationErrors: [],
   }
 
+  // TODO: add loader
   componentDidMount() {
-    this.props.getData();
+    const {
+      getGroups,
+      getVenues,
+    } = this.props;
+    getGroups();
+    getVenues();
   }
 
   itemClick = (item) => {
@@ -62,12 +74,12 @@ class GroupsListView extends PureComponent {
     const {
       create,
       setDialogState,
-      getData,
+      getGroups,
     } = this.props;
 
     await create(data);
     setDialogState(false);
-    getData();
+    getGroups();
   }
 
   render() {
@@ -79,6 +91,7 @@ class GroupsListView extends PureComponent {
       setDialogState,
       creationFetching,
       creationErrors,
+      venuesList,
     } = this.props;
     const headers = {
       name: 'School',
@@ -134,6 +147,7 @@ class GroupsListView extends PureComponent {
               disabled={creationFetching}
               onSubmit={this.saveItem}
               errors={creationErrors}
+              venues={venuesList}
             />
           </DialogFormBody>
           {creationFetching && <Loader />}
@@ -143,17 +157,19 @@ class GroupsListView extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ groups }) => ({
+const mapStateToProps = ({ groups, venues }) => ({
   list: groups.list,
   listFetching: groups.listFetching,
   listFetchingError: groups.listFetchingError,
   dialogOpened: groups.dialogOpened,
   creationFetching: groups.editFetching,
   creationErrors: groups.editErrors,
+  venuesList: venues.list,
 });
 
 const mapDispatchToProps = {
-  getData: groupsActions.getGroups,
+  getGroups: groupsActions.getGroups,
+  getVenues: venuesActions.getVenues,
   setDialogState: groupsActions.setDialogState,
   clearCreatingErrors: groupsActions.clearCreatingErrors,
   create: groupsActions.create,
