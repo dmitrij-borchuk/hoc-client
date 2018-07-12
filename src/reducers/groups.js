@@ -45,7 +45,7 @@ export default function authReducers(state = defaultState, action) {
         list: action.payload,
       };
 
-    // Get
+    // Edit
     case GROUPS_EDIT_FETCHING:
       return {
         ...state,

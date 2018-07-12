@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Field } from 'redux-form';
+import MenuItem from '@material-ui/core/MenuItem';
 import { renderTextField } from '../../utils';
 
 export const FORM_NAME = 'userForm';
@@ -8,10 +9,14 @@ export const FORM_NAME = 'userForm';
 class UsersPage extends PureComponent {
   static propTypes = {
     errors: PropTypes.arrayOf(PropTypes.shape({
-      path: PropTypes.string.isRequired,
+      path: PropTypes.arrayOf(PropTypes.string).isRequired,
       message: PropTypes.string.isRequired,
     })),
     disabled: PropTypes.bool.isRequired,
+    roles: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
   }
   static defaultProps = {
     errors: [],
@@ -21,6 +26,7 @@ class UsersPage extends PureComponent {
     const {
       errors,
       disabled,
+      roles,
     } = this.props;
     const errorMap = errors.reduce(
       (acc, cur) => ({
@@ -32,6 +38,8 @@ class UsersPage extends PureComponent {
 
     return (
       <Fragment>
+
+        {/* Email */}
         <Field
           name="email"
           component={renderTextField}
@@ -41,6 +49,8 @@ class UsersPage extends PureComponent {
           fullWidth
           disabled={disabled}
         />
+
+        {/* Username */}
         <Field
           name="username"
           component={renderTextField}
@@ -50,6 +60,27 @@ class UsersPage extends PureComponent {
           fullWidth
           disabled={disabled}
         />
+
+        {/* Role */}
+        <Field
+          name="roles"
+          component={renderTextField}
+          error={!!errorMap.roles}
+          helperText={errorMap.roles && errorMap.roles.message}
+          label="Select role"
+          fullWidth
+          disabled={disabled}
+
+          id="select-currency"
+          select
+          margin="normal"
+        >
+          {roles.map(option => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.name}
+            </MenuItem>
+          ))}
+        </Field>
       </Fragment>
     );
   }

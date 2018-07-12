@@ -19,7 +19,7 @@ class UsersPage extends PureComponent {
     getData: PropTypes.func.isRequired,
     users: PropTypes.arrayOf(PropTypes.shape({})),
     creationErrors: PropTypes.arrayOf(PropTypes.shape({
-      path: PropTypes.string.isRequired,
+      path: PropTypes.arrayOf(PropTypes.string).isRequired,
       message: PropTypes.string.isRequired,
     })),
     listFetching: PropTypes.bool.isRequired,
@@ -32,6 +32,10 @@ class UsersPage extends PureComponent {
     dialogOpened: PropTypes.bool.isRequired,
     setUserDialogState: PropTypes.func.isRequired,
     clearCreatingErrors: PropTypes.func.isRequired,
+    roles: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+    })).isRequired,
   }
   static defaultProps = {
     users: [],
@@ -47,10 +51,15 @@ class UsersPage extends PureComponent {
     const {
       saveUser,
       setUserDialogState,
+      getData,
     } = this.props;
 
-    await saveUser(data);
+    await saveUser({
+      ...data,
+      roles: data.roles ? [data.roles] : [],
+    });
     setUserDialogState(false);
+    getData();
   }
 
   closeDialog = () => {
@@ -72,6 +81,7 @@ class UsersPage extends PureComponent {
       dialogOpened,
       setUserDialogState,
       submitCreateUserForm,
+      roles,
     } = this.props;
     const items = users.map(user => ({
       text: user.username,
@@ -127,6 +137,7 @@ class UsersPage extends PureComponent {
               disabled={creationFetching}
               onSubmit={this.saveUser}
               errors={creationErrors}
+              roles={roles}
             />
           </DialogFormBody>
           {creationFetching && <Loader />}
@@ -136,13 +147,14 @@ class UsersPage extends PureComponent {
   }
 }
 
-const mapStateToProps = ({ users, pages }) => ({
+const mapStateToProps = ({ users, pages, roles }) => ({
   users: users.list,
   listFetching: pages.usersPage.fetching,
   listFetchingError: pages.usersPage.error,
   creationErrors: users.creating.errors,
   creationFetching: users.creating.fetching,
   dialogOpened: users.dialogOpened,
+  roles: roles.list,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -15,7 +15,7 @@ const CreateGroupForm = (props) => {
   const errorMap = errors.reduce(
     (acc, cur) => ({
       ...acc,
-      [cur.path]: cur,
+      [cur.path.join('.')]: cur,
     }),
     {},
   );
