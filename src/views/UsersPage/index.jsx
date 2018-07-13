@@ -9,7 +9,7 @@ import * as usersActions from '../../actions/users';
 import { usersPageGetData } from '../../actions/pages';
 import List from '../../components/List';
 import Dialog from '../../components/DialogForm';
-import { Fab } from '../../commonStyles';
+import { Fab, FabGroup } from '../../commonStyles';
 import { DialogFormBody } from '../../components/DialogForm/styles';
 import Loader from '../../components/Loader';
 import CreateUserForm, { FORM_NAME } from '../../components/CreateUserForm';
@@ -115,16 +115,19 @@ class UsersPage extends PureComponent {
         <List
           items={items}
         />
-        <Fab>
-          <Button
-            variant="fab"
-            color="primary"
-            aria-label="add"
-            onClick={() => setUserDialogState(true)}
-          >
-            <Icon>add</Icon>
-          </Button>
-        </Fab>
+
+        <FabGroup>
+          <Fab>
+            <Button
+              variant="fab"
+              color="primary"
+              aria-label="add"
+              onClick={() => setUserDialogState(true)}
+            >
+              <Icon>add</Icon>
+            </Button>
+          </Fab>
+        </FabGroup>
 
         <Dialog
           isOpened={dialogOpened}
