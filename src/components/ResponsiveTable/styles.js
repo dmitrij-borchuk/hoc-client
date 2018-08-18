@@ -13,6 +13,6 @@ export const ContentContainer = styled.div`
   padding: 20px;
 `;
 
-export const ControllsPanel = styled.div`
+export const ControlsPanel = styled.div`
   margin-top: 15px;
 `;

@@ -1,23 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ControllsPanel } from './styles';
+import { ControlsPanel } from './styles';
 
-export default function Controlls(props) {
+export default function Controls(props) {
   const {
     children,
   } = props;
 
   return (
-    <ControllsPanel>
+    <ControlsPanel>
       {children}
-    </ControllsPanel>
+    </ControlsPanel>
   );
 }
 
-Controlls.propTypes = {
+Controls.propTypes = {
   children: PropTypes.node,
 };
 
-Controlls.defaultProps = {
+Controls.defaultProps = {
   children: null,
 };

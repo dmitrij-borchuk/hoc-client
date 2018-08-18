@@ -2,27 +2,39 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-
-import { login } from '../../actions/auth';
+import * as authActions from '../../actions/auth';
 import AuthForm from '../../components/AuthForm/container';
 
 export class LoginPage extends React.PureComponent {
-  onSubmit(data) {
+  onSubmit = async (data) => {
     const {
       onSubmit,
       history,
     } = this.props;
 
-    onSubmit(data).then(() => history.push('/'));
+    await onSubmit(data);
+    history.push('/');
+  }
+
+  responseGoogle = async (response) => {
+    const {
+      oAuthLogin,
+      history,
+    } = this.props;
+
+    const authResponse = response.getAuthResponse();
+    await oAuthLogin(authResponse.id_token);
+    history.push('/');
   }
 
   render() {
     return (
       <div>
         <AuthForm
-          onSubmit={data => this.onSubmit(data)}
+          onSubmit={this.onSubmit}
           isFetching={this.props.isFetching}
           error={this.props.error}
+          responseGoogle={this.responseGoogle}
         />
       </div>
     );
@@ -31,6 +43,7 @@ export class LoginPage extends React.PureComponent {
 
 LoginPage.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  oAuthLogin: PropTypes.func.isRequired,
   isFetching: PropTypes.bool,
   error: PropTypes.shape({
     statusCode: PropTypes.number,
@@ -49,12 +62,9 @@ const mapStateToProps = ({ auth }) => ({
   error: auth.error,
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    onSubmit(credentials) {
-      return dispatch(login(credentials));
-    },
-  };
-}
+const mapDispatchToProps = {
+  onSubmit: authActions.login,
+  oAuthLogin: authActions.oAuthLogin,
+};
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginPage));

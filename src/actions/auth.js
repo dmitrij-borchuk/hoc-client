@@ -1,25 +1,43 @@
 import JWT from 'jsonwebtoken';
 import { setItem, getItem } from '../utils/storage';
+import * as authApi from '../api/auth';
+import { getFeatures } from '../services/features';
+import { setFeatures } from './features';
 
-import { login as loginRequest } from '../api/auth';
+export const AUTH_GET_CURRENT_USER = 'AUTH_GET_CURRENT_USER';
+export function getCurrentUser() {
+  return async (dispatch) => {
+    const token = getItem('token');
+    const userData = JWT.decode(token);
+    const features = getFeatures(userData.roles);
+    dispatch(setFeatures(features));
+    dispatch({
+      type: AUTH_GET_CURRENT_USER,
+      payload: userData,
+    });
+  };
+}
 
 export const AUTH_LOGIN_FETCHING = 'AUTH_LOGIN_FETCHING';
 export const AUTH_LOGIN_FETCHING_FINISH = 'AUTH_LOGIN_FETCHING_FINISH';
 export const AUTH_LOGIN_FETCHING_ERROR = 'AUTH_LOGIN_FETCHING_ERROR';
-export function login(params) {
+function loginActions(loginFunction, params) {
   return async (dispatch) => {
     dispatch({
       type: AUTH_LOGIN_FETCHING,
     });
 
     try {
-      const response = await loginRequest(params);
+      const response = await loginFunction(params);
       const token = response.text;
+      const userData = JWT.decode(token);
+
       setItem('token', token);
       dispatch({
         type: AUTH_LOGIN_FETCHING_FINISH,
-        payload: JWT.decode(token),
+        payload: userData,
       });
+      dispatch(getCurrentUser());
     } catch (err) {
       dispatch({
         type: AUTH_LOGIN_FETCHING_ERROR,
@@ -31,14 +49,15 @@ export function login(params) {
   };
 }
 
-export const AUTH_GET_CURRENT_USER = 'AUTH_GET_CURRENT_USER';
-export function getCurrentUser() {
+export function login(params) {
   return async (dispatch) => {
-    const token = getItem('token');
-    dispatch({
-      type: AUTH_GET_CURRENT_USER,
-      payload: JWT.decode(token),
-    });
+    dispatch(loginActions(authApi.login, params));
+  };
+}
+
+export function oAuthLogin(params) {
+  return async (dispatch) => {
+    dispatch(loginActions(authApi.oAuthLogin, params));
   };
 }
 
@@ -52,28 +71,29 @@ export function getCurrentUser() {
 //   };
 // }
 
-// export const AUTH_RESET_PASSWORD_FETCHING = 'AUTH_RESET_PASSWORD_FETCHING';
-// export const AUTH_RESET_PASSWORD_FETCHING_FINISH = 'AUTH_RESET_PASSWORD_FETCHING_FINISH';
-// export const AUTH_RESET_PASSWORD_FETCHING_ERROR = 'AUTH_RESET_PASSWORD_FETCHING_ERROR';
-// export function resetPassword(data) {
-//   return (dispatch) => {
-//     dispatch({
-//       type: AUTH_RESET_PASSWORD_FETCHING,
-//     });
+export const AUTH_RESET_PASSWORD_FETCHING = 'AUTH_RESET_PASSWORD_FETCHING';
+export const AUTH_RESET_PASSWORD_FETCHING_FINISH = 'AUTH_RESET_PASSWORD_FETCHING_FINISH';
+export const AUTH_RESET_PASSWORD_FETCHING_ERROR = 'AUTH_RESET_PASSWORD_FETCHING_ERROR';
+export function resetPassword(data) {
+  return (dispatch) => {
+    dispatch({
+      type: AUTH_RESET_PASSWORD_FETCHING,
+    });
 
-//     return auth.resetPassword(data).then(
-//       () => dispatch({
-//         type: AUTH_RESET_PASSWORD_FETCHING_FINISH,
-//       }),
-//     ).catch((err) => {
-//       dispatch({
-//         type: AUTH_RESET_PASSWORD_FETCHING_ERROR,
-//         payload: err.response.body.message,
-//       });
-//       return Promise.reject(err);
-//     });
-//   };
-// }
+    return authApi.resetPassword(data).then(
+      () => dispatch({
+        type: AUTH_RESET_PASSWORD_FETCHING_FINISH,
+      }),
+    ).catch((err) => {
+      dispatch({
+        type: AUTH_RESET_PASSWORD_FETCHING_ERROR,
+        error: true,
+        payload: err.response.body,
+      });
+      return Promise.reject(err);
+    });
+  };
+}
 
 // export const RESET_PASSWORD_SET_FORM = 'RESET_PASSWORD_SET_FORM';
 // export function resetPasswordSetForm(data) {

@@ -9,7 +9,7 @@ import { renderTextField } from '../../utils';
 import Panel from '../../components/Panel';
 import PanelHeader from '../../components/Panel/header';
 import PanelContent from '../../components/Panel/content';
-import PanelControlls from '../../components/Panel/controlls';
+import PanelControls from '../../components/Panel/Controls';
 import {
   Container,
   Content,
@@ -54,7 +54,7 @@ export class InitPage extends PureComponent {
                   label="Username"
                   fullWidth
                 />
-                <PanelControlls>
+                <PanelControls>
                   <Button
                     variant="raised"
                     color="primary"
@@ -63,7 +63,7 @@ export class InitPage extends PureComponent {
                   >
                     Submit
                   </Button>
-                </PanelControlls>
+                </PanelControls>
               </form>
             </Content>
           </PanelContent>

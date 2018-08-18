@@ -9,6 +9,7 @@ import groups from './groups';
 import pages from './pages';
 import venues from './venues';
 import roles from './roles';
+import features from './features';
 
 export default combineReducers({
   app,
@@ -20,6 +21,7 @@ export default combineReducers({
   pages,
   venues,
   roles,
+  features,
 
   form: formReducer,
 });

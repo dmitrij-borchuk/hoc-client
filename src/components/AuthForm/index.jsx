@@ -4,17 +4,20 @@ import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { reduxForm, Field } from 'redux-form';
-
+import GoogleLogin from 'react-google-login';
 import { renderTextField } from '../../utils';
 import Loader from '../Loader';
-import { LinkBtn } from '../../commonStyles';
+// import { LinkBtn } from '../../commonStyles';
 import {
   Container,
   Header,
   Content,
   ContentContainer,
   SubmitBtn,
-  BottomLink,
+  // BottomLink,
+  GoogleBtn,
+  HorizontalSeparator,
+  SeparatorText,
 } from './styles';
 
 // import messages from './messages';
@@ -25,6 +28,7 @@ function AuthForm(props) {
     isFetching,
     handleSubmit,
     serverError,
+    responseGoogle,
   } = props;
 
   return (
@@ -38,6 +42,25 @@ function AuthForm(props) {
         <ContentContainer>
           <form onSubmit={handleSubmit}>
             <Content>
+
+              {/* Google login */}
+              <GoogleLogin
+                clientId="368978317118-17h4u0v4f4qe9bq4l6sp0ljujslfr525.apps.googleusercontent.com"
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+                style={{}}
+                tag="div"
+              >
+                <GoogleBtn>
+                  Login with Google
+                </GoogleBtn>
+              </GoogleLogin>
+
+              <HorizontalSeparator>
+                <SeparatorText>or</SeparatorText>
+              </HorizontalSeparator>
+
+              {/* Password login */}
               <Field
                 name="email"
                 component={renderTextField}
@@ -66,11 +89,11 @@ function AuthForm(props) {
                   Submit
                 </Button>
               </SubmitBtn>
-              <BottomLink>
+              {/* <BottomLink>
                 <LinkBtn href="/resetPassword">
                   Forgot password
                 </LinkBtn>
-              </BottomLink>
+              </BottomLink> */}
             </Content>
           </form>
 
@@ -85,6 +108,7 @@ function AuthForm(props) {
 
 AuthForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  responseGoogle: PropTypes.func.isRequired,
   isFetching: PropTypes.bool,
   serverError: PropTypes.string,
 };

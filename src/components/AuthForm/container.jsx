@@ -23,6 +23,7 @@ class AuthFormContainer extends PureComponent {
       isFetching,
       onSubmit,
       error,
+      responseGoogle,
     } = this.props;
 
     return (
@@ -30,6 +31,7 @@ class AuthFormContainer extends PureComponent {
         serverError={getErrorText(error)}
         isFetching={isFetching}
         onSubmit={onSubmit}
+        responseGoogle={responseGoogle}
       />
     );
   }
@@ -37,6 +39,7 @@ class AuthFormContainer extends PureComponent {
 
 AuthFormContainer.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  responseGoogle: PropTypes.func.isRequired,
   isFetching: PropTypes.bool,
   error: PropTypes.shape({
     statusCode: PropTypes.number,

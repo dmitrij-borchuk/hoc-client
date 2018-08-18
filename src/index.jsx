@@ -10,6 +10,7 @@ import './styles.css';
 import reducers from './reducers';
 import App from './App';
 import LoginContainer from './views/LoginPage';
+// import ResetPasswordPage from './views/ResetPasswordPage';
 
 const store = createStore(
   reducers,
@@ -28,8 +29,8 @@ render(
         <CssBaseline />
         <Switch>
           <Route path="/login" component={LoginContainer} />
-          {/* <Route path="/resetPassword" component={ResetPasswordPage} />
-          <Route path="/setPassword/:token" component={SetPasswordPage} /> */}
+          {/* <Route path="/resetPassword" component={ResetPasswordPage} /> */}
+          {/* <Route path="/setPassword/:token" component={SetPasswordPage} /> */}
           <Route path="/" component={App} />
         </Switch>
       </div>
